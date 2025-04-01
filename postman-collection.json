@@ -1,0 +1,616 @@
+{
+	"info": {
+		"_postman_id": "10a7a51e-e5c8-4a94-8e10-f4c71d9e5c55",
+		"name": "繪本創作系統 API",
+		"description": "這是繪本創作系統 API 的 Postman 集合，包含所有端點的測試範例。",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "認證 API",
+			"item": [
+				{
+					"name": "登入",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.state === true && jsonData.data && jsonData.data.token) {",
+									"    pm.environment.set(\"token\", jsonData.data.token);",
+									"    console.log(\"令牌已設定\");",
+									"} else {",
+									"    console.log(\"登入失敗，未能獲取令牌\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "使用電子郵件和密碼登入系統，獲取 JWT 令牌。"
+					},
+					"response": []
+				}
+			],
+			"description": "與身份驗證相關的 API 端點。"
+		},
+		{
+			"name": "繪本基本資訊 API",
+			"item": [
+				{
+					"name": "建立/更新繪本",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_name_ch\": \"獨角獸的奇幻森林\",\n    \"book_name_en\": \"The Enchanted Forest of Unicorns\",\n    \"style\": 2,\n    \"book_author\": \"amber\",\n    \"preface\": \"作者想說的話...\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book"
+							]
+						},
+						"description": "創建新的繪本或更新現有繪本的基本資訊。"
+					},
+					"response": []
+				},
+				{
+					"name": "取得繪本資訊",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/book",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book"
+							]
+						},
+						"description": "獲取當前登入用戶的繪本基本資訊。"
+					},
+					"response": []
+				}
+			],
+			"description": "與繪本基本資訊相關的 API 端點。"
+		},
+		{
+			"name": "角色 API",
+			"item": [
+				{
+					"name": "建立/更新角色",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"閃電\",\n    \"features\": \"霓虹粉色獨角獸，眼睛是粉紅色\",\n    \"image\": \"http://example.com/images/xxx.png\",\n    \"prompt\": \"霓虹粉色獨角獸，名叫閃電...\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book/character",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"character"
+							]
+						},
+						"description": "創建新的繪本角色或更新現有角色的資訊。"
+					},
+					"response": []
+				},
+				{
+					"name": "取得角色資訊",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/book/character",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"character"
+							]
+						},
+						"description": "獲取繪本的所有角色資訊。"
+					},
+					"response": []
+				}
+			],
+			"description": "與繪本角色相關的 API 端點。"
+		},
+		{
+			"name": "故事段落 API",
+			"item": [
+				{
+					"name": "建立/更新故事段落",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": \"YOUR_BOOK_ID\",\n    \"page\": 1,\n    \"user_input\": \"在一片神秘花園中，閃電發現了一張神奇地圖。\",\n    \"en_user_input\": \"In a mysterious garden, Lightning discovered a magical map.\",\n    \"position_input\": \"bottom-right\",\n    \"user_pic_select\": \"http://example.com/images/xxx.png\",\n    \"user_pic_input\": [\n        {\"who\": \"閃電\"},\n        {\"where\": \"很多玫瑰花的神秘花園\"},\n        {\"what\": \"發現了一張神奇地圖\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book/data",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"data"
+							]
+						},
+						"description": "創建或更新繪本中特定頁的故事內容。"
+					},
+					"response": []
+				},
+				{
+					"name": "取得故事段落",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/book/data?book_id=YOUR_BOOK_ID&page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"data"
+							],
+							"query": [
+								{
+									"key": "book_id",
+									"value": "YOUR_BOOK_ID"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "獲取指定繪本和頁碼的故事內容。"
+					},
+					"response": []
+				}
+			],
+			"description": "與繪本故事段落相關的 API 端點。"
+		},
+		{
+			"name": "生圖提示詞 API",
+			"item": [
+				{
+					"name": "生成圖像提示詞",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"scene_description\": \"請根據以下信息生成 JSON：地點：充滿星際元素的太空背景，人物：太空貓，動作：設計了一個光束洞陷阱，用來智取潛伏的太空海盜\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book/prompt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"prompt"
+							]
+						},
+						"description": "根據場景描述生成 AI 圖像生成所需的提示詞。"
+					},
+					"response": []
+				}
+			],
+			"description": "與生成圖像提示詞相關的 API 端點。"
+		},
+		{
+			"name": "圖片生成 API",
+			"item": [
+				{
+					"name": "提交圖片生成任務",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"story_pic_prompt\": \"閃電是一隻霓虹粉色獨角獸...\",\n    \"style\": \"3D立體\",\n    \"book_id\": \"YOUR_BOOK_ID\",\n    \"page\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book/image",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"image"
+							]
+						},
+						"description": "提交圖片生成任務，使用 AI 根據提示詞生成圖像。"
+					},
+					"response": []
+				}
+			],
+			"description": "與圖片生成相關的 API 端點。"
+		},
+		{
+			"name": "翻譯 API",
+			"item": [
+				{
+					"name": "翻譯文本",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input_text\": \"在一片神秘花園中，閃電發現了一張神奇地圖。\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/translate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"translate"
+							]
+						},
+						"description": "將中文文本翻譯成英文。"
+					},
+					"response": []
+				}
+			],
+			"description": "與翻譯相關的 API 端點。"
+		},
+		{
+			"name": "故事分段 API",
+			"item": [
+				{
+					"name": "故事分段分析",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"story_segment\": \"閃電在大雨中邂逅了一只藍色的小龍，它們快速成為了好朋友。\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/book/story-segmentation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"story-segmentation"
+							]
+						},
+						"description": "將故事片段分解為「who / where / what」組件。"
+					},
+					"response": []
+				}
+			],
+			"description": "與故事分段分析相關的 API 端點。"
+		},
+		{
+			"name": "聊天機器人 API",
+			"item": [
+				{
+					"name": "開始對話",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData && jsonData.conversationId) {",
+									"    pm.environment.set(\"conversationId\", jsonData.conversationId);",
+									"    console.log(\"對話 ID 已設定: \" + jsonData.conversationId);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentMode\": \"title-creation\",\n    \"userMessage\": \"我想要一個關於太空冒險的故事\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat"
+							]
+						},
+						"description": "開始一個新的聊天對話。"
+					},
+					"response": []
+				},
+				{
+					"name": "繼續對話",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentMode\": \"title-creation\",\n    \"userMessage\": \"我希望故事的主角是一隻勇敢的小貓\",\n    \"conversationId\": \"{{conversationId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chat"
+							]
+						},
+						"description": "繼續現有的聊天對話。"
+					},
+					"response": []
+				}
+			],
+			"description": "與聊天機器人相關的 API 端點。"
+		},
+		{
+			"name": "健康檢查",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health"
+					]
+				},
+				"description": "檢查 API 服務是否正常運行。"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
